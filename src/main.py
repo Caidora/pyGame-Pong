@@ -2,11 +2,13 @@ from curses.textpad import rectangle
 import sys, pygame
 import random 
 from Ball import Ball
+from Button import Button
 random.seed()
 pygame.init()
 clock = pygame.time.Clock()
 black = 0,0,0
 white = 255,255,255
+darker = 100,100,100
 size = width, height = 1600, 1200
 screen = pygame.display.set_mode(size)
 font = pygame.font.SysFont('arial', 300)
@@ -18,13 +20,46 @@ enemyX, enemyY = width/2-(paddleWidth/2), 10
 player = pygame.Rect(playerX, playerY, paddleWidth, paddleHeight)
 enemy = pygame.Rect(enemyX, enemyY, paddleWidth, paddleHeight)
 
-ingame = True
+ingame = False
 p1Score = 0
 p2Score = 0
 run = 1
 ball = False
+while(not(ingame)):
+    clock.tick(165)
+    font = pygame.font.SysFont('arial', 50)
+    quitButton = Button(screen, 2*(width/3), height/2, "QUIT")
+    playButton = Button(screen, width/3, height/2, "PLAY")
+    
+    for ev in pygame.event.get():
+        if ev.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+        if ev.type == pygame.MOUSEBUTTONDOWN:
+            if(quitButton.pressed(pygame.mouse.get_pos())):
+                pygame.quit()
+                exit()
+        if ev.type == pygame.MOUSEBUTTONDOWN:
+            if(playButton.pressed(pygame.mouse.get_pos())):
+                ingame= True
+                continue
+                
+
+    screen.fill(black)
+    Text = "Welcome to Pong.py!"
+    renderedText = font.render(Text, True, white)
+    screen.blit(renderedText, (width/2-(renderedText.get_width()/2), height/4))
+    
+    quitButton.draw(pygame.mouse.get_pos())
+    playButton.draw(pygame.mouse.get_pos())
+
+    pygame.display.update()
+
+
 while ingame:
     clock.tick(165)
+    font = pygame.font.SysFont('arial', 300)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
