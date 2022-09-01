@@ -18,11 +18,13 @@ class Button:
         darker = 100,100,100
         if self.adjustedX <= mouse[0] <= self.adjustedX+140 and self.adjustedY <= mouse[1] <= self.adjustedY+40:
             pygame.draw.rect(self.screen,white,[self.adjustedX,self.adjustedY,140,40])
+            self.renderText(darker)
           
         else:
             pygame.draw.rect(self.screen,darker,[self.adjustedX,self.adjustedY,140,40])
-        renderedText = self.font.render(self.text, True, white)
-        self.screen.blit(renderedText, ((self.adjustedX+(self.buttonWidth-renderedText.get_width())/2), self.adjustedY))
+            self.renderText(white)
+            
+        
 
     def pressed(self, mouse):
         if self.adjustedX <= mouse[0] <= self.adjustedX+self.buttonWidth and self.adjustedY <= mouse[1] <= self.adjustedY+self.buttonHeight:
@@ -39,3 +41,7 @@ class Button:
         
     def getY(self):
         return(self.adjustedY)
+    
+    def renderText(self, color):
+        renderedText = self.font.render(self.text, True, color)
+        self.screen.blit(renderedText, ((self.adjustedX+(self.buttonWidth-renderedText.get_width())/2), self.adjustedY))
