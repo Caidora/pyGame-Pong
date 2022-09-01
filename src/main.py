@@ -34,8 +34,6 @@ while ingame:
         ballDirX, ballDirY = random.uniform(-1,1), 1 
         currentBallX, currentBallY, currentBallDirX, currentBallDirY = ballX, ballY, ballDirX, ballDirY
 
-
-        
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT] and player.x>10:
         player.x -=5
@@ -46,9 +44,8 @@ while ingame:
     if keys[pygame.K_d] and enemy.x<width-paddleWidth-10:
         enemy.x +=5
 
-    currentBallX = currentBallX+ currentBallDirX*3
-    currentBallY = currentBallY+ currentBallDirY*3
-    print(currentBallY)
+    currentBallX = currentBallX+ currentBallDirX*5
+    currentBallY = currentBallY+ currentBallDirY*5
 
     if(currentBallY>height-ballWidth-paddleHeight-10):
         if(currentBallX>player.x and currentBallX<player.x+paddleWidth):
@@ -66,11 +63,13 @@ while ingame:
             p1Score +=1
     if((currentBallX>width-ballWidth) or (currentBallX<0+ballWidth)):
         currentBallDirX = currentBallDirX * -1
+    
     screen.fill(black)
     pygame.draw.circle(screen, white, (currentBallX, currentBallY), ballWidth, 0)
     pygame.draw.rect(screen, white, player)
     pygame.draw.rect(screen, white, enemy)
     pygame.display.update()
+
     if(run==0):
         pygame.quit()
         exit()
