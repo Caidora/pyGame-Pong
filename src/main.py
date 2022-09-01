@@ -1,6 +1,7 @@
 from curses.textpad import rectangle
 import sys, pygame
 import random 
+from Ball import Ball
 random.seed()
 pygame.init()
 clock = pygame.time.Clock()
@@ -8,9 +9,6 @@ black = 0,0,0
 white = 255,255,255
 size = width, height = 1600, 1200
 screen = pygame.display.set_mode(size)
-
-ballX, ballY = width/2, height/2
-ballWidth, ballheight = 10, 10
 
 
 paddleHeight, paddleWidth = 25, 200
@@ -23,16 +21,15 @@ ingame = True
 p1Score = 0
 p2Score = 0
 run = 1
-Ball = False
+ball = False
 while ingame:
     clock.tick(165)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = 0
-    if(Ball == False):
-        Ball = True
-        ballDirX, ballDirY = random.uniform(-1,1), 1 
-        currentBallX, currentBallY, currentBallDirX, currentBallDirY = ballX, ballY, ballDirX, ballDirY
+    if(ball == False):
+        currentBall = Ball(width, height)
+        ball = True
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT] and player.x>10:
@@ -44,28 +41,25 @@ while ingame:
     if keys[pygame.K_d] and enemy.x<width-paddleWidth-10:
         enemy.x +=5
 
-    currentBallX = currentBallX+ currentBallDirX*5
-    currentBallY = currentBallY+ currentBallDirY*5
+    currentBall.frameMove()
 
-    if(currentBallY>height-ballWidth-paddleHeight-10):
-        if(currentBallX>player.x and currentBallX<player.x+paddleWidth):
-            currentBallDirY = currentBallDirY * -1
-            currentBallDirX = random.uniform(-1, 1)*-1
+    if(currentBall.getY()>height-currentBall.getWidth()-paddleHeight-10):
+        if(currentBall.getX()>player.x and currentBall.getX()<player.x+paddleWidth):
+            currentBall.collide()
         else:
-            Ball = False
+            ball = False
             p2Score +=1
-    elif(currentBallY<0+ballWidth+paddleHeight+10):
-        if(currentBallX>enemy.x and currentBallX<enemy.x+paddleWidth):
-            currentBallDirY = currentBallDirY * -1
-            currentBallDirX = random.uniform(-1, 1)*-1
+    elif(currentBall.getY()<0+currentBall.getWidth()+paddleHeight+10):
+        if(currentBall.getX()>enemy.x and currentBall.getX()<enemy.x+paddleWidth):
+            currentBall.collide()
         else:
-            Ball = False
+            ball = False
             p1Score +=1
-    if((currentBallX>width-ballWidth) or (currentBallX<0+ballWidth)):
-        currentBallDirX = currentBallDirX * -1
+    if((currentBall.getX()>width-currentBall.getWidth()) or (currentBall.getX()<0+currentBall.getWidth())):
+        currentBall.collideX()
     
     screen.fill(black)
-    pygame.draw.circle(screen, white, (currentBallX, currentBallY), ballWidth, 0)
+    pygame.draw.circle(screen, white, (currentBall.getX(), currentBall.getY()), currentBall.getWidth(), 0)
     pygame.draw.rect(screen, white, player)
     pygame.draw.rect(screen, white, enemy)
     pygame.display.update()
