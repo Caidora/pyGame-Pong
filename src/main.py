@@ -11,7 +11,7 @@ screen = pygame.display.set_mode(size)
 
 ballX, ballY = width/2, height/2
 ballWidth, ballheight = 10, 10
-ballDirX, ballDirY = -1, 1 
+
 
 paddleHeight, paddleWidth = 25, 200
 playerX, playerY = width/2-(paddleWidth/2), height-35
@@ -31,6 +31,7 @@ while ingame:
             run = 0
     if(Ball == False):
         Ball = True
+        ballDirX, ballDirY = random.uniform(-1,1), 1 
         currentBallX, currentBallY, currentBallDirX, currentBallDirY = ballX, ballY, ballDirX, ballDirY
 
 
