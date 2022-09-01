@@ -12,6 +12,7 @@ darker = 100,100,100
 size = width, height = 1600, 1200
 screen = pygame.display.set_mode(size)
 font = pygame.font.SysFont('arial', 300)
+red = 255,0,0
 
 
 paddleHeight, paddleWidth = 25, 200
@@ -27,9 +28,9 @@ run = 1
 ball = False
 while(not(ingame)):
     clock.tick(165)
-    font = pygame.font.SysFont('arial', 50)
-    quitButton = Button(screen, 2*(width/3), height/2, "QUIT")
-    playButton = Button(screen, width/3, height/2, "PLAY")
+    font = pygame.font.SysFont('arial', 200)
+    quitButton = Button(screen, 2*(width/3), height/1.5, "QUIT", 400, 200)
+    playButton = Button(screen, width/3, height/1.5, "PLAY", 400, 200)
     
     for ev in pygame.event.get():
         if ev.type == pygame.QUIT:
@@ -48,24 +49,25 @@ while(not(ingame)):
     screen.fill(black)
     Text = "Welcome to Pong.py!"
     renderedText = font.render(Text, True, white)
-    screen.blit(renderedText, (width/2-(renderedText.get_width()/2), height/4))
+    screen.blit(renderedText, (width/2-(renderedText.get_width()/2), height/6))
     
     quitButton.draw(pygame.mouse.get_pos())
     playButton.draw(pygame.mouse.get_pos())
 
     pygame.display.update()
-
-
+currentWait = 0
+Wait = 495
 while ingame:
     clock.tick(165)
     font = pygame.font.SysFont('arial', 300)
+
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
     if(ball == False):
-        currentBall = Ball(width, height)
+        currentBall = Ball(width, height, 4)
         ball = True
 
     keys = pygame.key.get_pressed()
@@ -77,8 +79,10 @@ while ingame:
         enemy.x -=5
     if keys[pygame.K_d] and enemy.x<width-paddleWidth-10:
         enemy.x +=5
-
-    currentBall.frameMove()
+    if(currentWait<=Wait):
+        currentWait+=1
+    else:    
+        currentBall.frameMove()
 
     if(currentBall.getY()>height-currentBall.getWidth()-paddleHeight-10):
         if(currentBall.getX()>player.x and currentBall.getX()<player.x+paddleWidth):
@@ -102,7 +106,7 @@ while ingame:
     screen.blit(letterEnemy, ((3*width)/4,height/2-letterPlayer.get_height()/2))
     screen.blit(letterPlayer, (width/4-letterPlayer.get_width(),height/2-letterPlayer.get_height()/2))
 
-    pygame.draw.circle(screen, white, (currentBall.getX(), currentBall.getY()), currentBall.getWidth(), 0)
+    pygame.draw.circle(screen, red, (currentBall.getX(), currentBall.getY()), currentBall.getWidth(), 0)
     pygame.draw.rect(screen, white, player)
     pygame.draw.rect(screen, white, enemy)
     pygame.display.update()

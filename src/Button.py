@@ -6,25 +6,27 @@ class Button:
         self.x = x
         self.y = y
         self.adjustedX = x-(buttonWidth/2)
-        self.adjustedY = y-(buttonWidth/2)
+        self.adjustedY = y-(buttonHeight/2)
         self.screen = screen
         self.buttonWidth = buttonWidth
         self.buttonHeight = buttonHeight
         self.text = text
-        self.font = pygame.font.SysFont('arial', 40)
+        self.font = pygame.font.SysFont('arial', self.buttonHeight)
     
     def draw(self, mouse):
         white = 255,255,255
         darker = 100,100,100
-        if self.adjustedX <= mouse[0] <= self.adjustedX+140 and self.adjustedY <= mouse[1] <= self.adjustedY+40:
-            pygame.draw.rect(self.screen,white,[self.adjustedX,self.adjustedY,140,40])
+        if self.adjustedX <= mouse[0] <= self.adjustedX+self.buttonWidth and self.adjustedY <= mouse[1] <= self.adjustedY+self.buttonHeight:
+            pygame.draw.rect(self.screen,white,[self.adjustedX,self.adjustedY,self.buttonWidth,self.buttonHeight])
             self.renderText(darker)
           
         else:
-            pygame.draw.rect(self.screen,darker,[self.adjustedX,self.adjustedY,140,40])
+            pygame.draw.rect(self.screen,darker,[self.adjustedX,self.adjustedY,self.buttonWidth,self.buttonHeight])
             self.renderText(white)
             
-        
+    def renderText(self, color):
+        renderedText = self.font.render(self.text, True, color)
+        self.screen.blit(renderedText, ((self.adjustedX+(self.buttonWidth-renderedText.get_width())/2), self.adjustedY))
 
     def pressed(self, mouse):
         if self.adjustedX <= mouse[0] <= self.adjustedX+self.buttonWidth and self.adjustedY <= mouse[1] <= self.adjustedY+self.buttonHeight:
@@ -41,7 +43,3 @@ class Button:
         
     def getY(self):
         return(self.adjustedY)
-    
-    def renderText(self, color):
-        renderedText = self.font.render(self.text, True, color)
-        self.screen.blit(renderedText, ((self.adjustedX+(self.buttonWidth-renderedText.get_width())/2), self.adjustedY))
