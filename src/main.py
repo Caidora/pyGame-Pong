@@ -9,6 +9,7 @@ black = 0,0,0
 white = 255,255,255
 size = width, height = 1600, 1200
 screen = pygame.display.set_mode(size)
+font = pygame.font.SysFont('arial', 300)
 
 
 paddleHeight, paddleWidth = 25, 200
@@ -26,7 +27,8 @@ while ingame:
     clock.tick(165)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            run = 0
+            pygame.quit()
+            exit()
     if(ball == False):
         currentBall = Ball(width, height)
         ball = True
@@ -59,14 +61,19 @@ while ingame:
         currentBall.collideX()
     
     screen.fill(black)
+
+    letterPlayer = font.render(str(p1Score),True, white)
+    letterEnemy = font.render(str(p2Score),True, white)
+    screen.blit(letterEnemy, ((3*width)/4,height/2-letterPlayer.get_height()/2))
+    screen.blit(letterPlayer, (width/4-letterPlayer.get_width(),height/2-letterPlayer.get_height()/2))
+
     pygame.draw.circle(screen, white, (currentBall.getX(), currentBall.getY()), currentBall.getWidth(), 0)
     pygame.draw.rect(screen, white, player)
     pygame.draw.rect(screen, white, enemy)
     pygame.display.update()
 
-    if(run==0):
-        pygame.quit()
-        exit()
+
+        
 
     
         
